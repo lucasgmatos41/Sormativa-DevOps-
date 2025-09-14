@@ -1,3 +1,2 @@
-echo "flask" > requirements.txt
-git add requirements.txt
-git commit -m "chore: adiciona dependência Flask"
+Flask
+requests
