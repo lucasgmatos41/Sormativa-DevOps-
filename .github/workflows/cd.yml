@@ -15,13 +15,13 @@ jobs:
       - name: Login no DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.lucasmatos041 }}
+          password: ${{ secrets.Eros010320 }}
 
       - name: Build imagem Docker
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/todo-api:latest .
+          docker build -t ${{ secrets.lucasmatos041 }}/todo-api:latest .
 
       - name: Push imagem para DockerHub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/todo-api:latest
+          docker push ${{ secrets.lucasmatos041  }}/todo-api:latest
