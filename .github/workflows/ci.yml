@@ -1,3 +1,6 @@
+ git-checkout--b-feature/todo-api
+
+
 name: CI - Python Flask
 
 on:
@@ -27,3 +30,4 @@ jobs:
       - name: Rodar testes básicos
         run: |
           python -m unittest discover -s tests -p "*.py"
+main
