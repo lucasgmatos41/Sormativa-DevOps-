@@ -1,0 +1,27 @@
+name: CD - Docker Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Login no DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.lucasmatos041 }}
+          password: ${{ secrets.Eros010320 }}
+
+      - name: Build imagem Docker
+        run: |
+          docker build -t ${{ secrets.lucasmatos041 }}/todo-api:latest .
+
+      - name: Push imagem para DockerHub
+        run: |
+          docker push ${{ secrets.lucasmatos041  }}/todo-api:latest
