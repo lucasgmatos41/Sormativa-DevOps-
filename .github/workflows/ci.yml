@@ -28,20 +28,21 @@ jobs:
           pip install -r requirements.txt
 
       - name: Rodar testes
-        run: |
-          python -m unittest discover
+        run: python -m unittest discover
 
       # Enviar alerta no Telegram (sempre executa, sucesso ou falha)
       - name: Enviar alerta no Telegram
         if: always()
         run: |
-          STATUS="${{ job.status }}"
-          if [ "$STATUS" = "success" ]; then
-            MSG=" Build e testes passaram com sucesso!"
+          # Define a mensagem conforme status
+          if [ "${{ job.status }}" = "success" ]; then
+            MSG="Build e testes passaram com sucesso!"
           else
-            MSG=" Falha no build ou nos testes!"
+            MSG="Falha no build ou nos testes!"
           fi
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-            -d chat_id=${{ secrets.TELEGRAM_TO}} \
-            -d text="*GitHub Actions* - CI Pipeline\nRepositório: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nAutor: ${{ github.actor }}\nStatus: $MSG" \
-            -d parse_mode="Markdown"
+
+          # Envia mensagem via Telegram (tudo em uma linha para evitar erros de quebra)
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_TO}}" \
+            -d "text=*GitHub Actions* - CI Pipeline\nRepositório: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nAutor: ${{ github.actor }}\nStatus: $MSG" \
+            -d parse_mode=Markdown
