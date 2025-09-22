@@ -1,13 +1,13 @@
- git-checkout--b-feature/todo-api
-
-
 name: CI - Python Flask
 
 on:
   push:
-    branches: [ main, feature/* ]
+    branches:
+      - main
+      - feature/*
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Instalar dependências
         run: |
@@ -29,4 +29,22 @@ jobs:
 
       - name: Rodar testes básicos
         run: |
-          python -m unittest discover -s tests -p "*.py"
+          python -m unittest discover -s test -p "*.py"
+
+      # Enviar alerta no Telegram (sempre executa, sucesso ou falha)
+      - name: Enviar alerta no Telegram
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            STATUS="Build e testes passaram com sucesso!"
+          else
+            STATUS="Falha no build ou nos testes!"
+          fi
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="🚀 *GitHub Actions* - CI Pipeline
+          Repositório: ${{ github.repository }}
+          Branch: ${{ github.ref_name }}
+          Autor: ${{ github.actor }}
+          Status: $STATUS" \
+            -d parse_mode="Markdown"
