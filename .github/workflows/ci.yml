@@ -30,4 +30,3 @@ jobs:
       - name: Rodar testes básicos
         run: |
           python -m unittest discover -s tests -p "*.py"
-main
